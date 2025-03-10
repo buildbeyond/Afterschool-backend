@@ -7,6 +7,7 @@ export interface IUserBase {
   email: string;
   password: string;
   role: string;
+  avatar: string;
 }
 
 // Interface for populated user documents

@@ -4,6 +4,7 @@ import { messageController } from "../controllers/messageController";
 import { scheduleController } from "../controllers/scheduleController";
 import { auth } from "../middleware/auth";
 import { checkRole } from "../middleware/checkRole";
+import { uploadController } from "../controllers/uploadController";
 
 const router = express.Router();
 
@@ -11,6 +12,9 @@ const router = express.Router();
 router.post("/auth/register", authController.register);
 router.post("/auth/login", authController.login);
 router.get("/auth/me", auth, authController.getCurrentUser);
+
+// Upload routes  (protected)
+router.post("/uploadAvatar", auth, uploadController.uploadAvatar);
 
 // Schedule routes (protected)
 router.post(

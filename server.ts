@@ -6,9 +6,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import routes from "./routes";
-import { auth } from "./middleware/auth";
 import { Message } from "./models/Message";
-import { User } from "./models/User";
 
 dotenv.config();
 
@@ -16,7 +14,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST"],
   },
 });
@@ -24,6 +22,9 @@ const io = new Server(httpServer, {
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from uploads directory
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/api", routes);
