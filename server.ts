@@ -20,7 +20,11 @@ const io = new Server(httpServer, {
 });
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  })
+);
 app.use(express.json());
 
 // Serve static files from uploads directory
