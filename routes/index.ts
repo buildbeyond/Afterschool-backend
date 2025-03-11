@@ -23,11 +23,25 @@ router.post(
   checkRole(["parent"]) as express.RequestHandler,
   scheduleController.createSchedule as express.RequestHandler
 );
+
+router.get(
+  "/schedule",
+  auth,
+  scheduleController.getSchedule as express.RequestHandler
+);
+
 router.get(
   "/schedule/stats",
   auth,
   checkRole(["coach"]) as express.RequestHandler,
   scheduleController.getStats as express.RequestHandler
+);
+
+router.post(
+  "/schedule/stats",
+  auth,
+  checkRole(["coach"]) as express.RequestHandler,
+  scheduleController.updateScheduleStats as express.RequestHandler
 );
 
 // Message routes (protected)
