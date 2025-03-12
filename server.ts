@@ -22,7 +22,8 @@ const io = new Server(httpServer, {
 // Middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: [process.env.CLIENT_URL!],
+    methods: ["GET", "POST"],
   })
 );
 app.use(express.json());
