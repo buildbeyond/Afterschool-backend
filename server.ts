@@ -20,16 +20,12 @@ const io = new Server(httpServer, {
 });
 
 // Middleware
-app.use(
-  cors({
-    origin: [process.env.CLIENT_URL!],
-    methods: ["GET", "POST"],
-  })
-);
+app.use(cors());
 app.use(express.json());
 
-// Serve static files from uploads directory
+// Serve static files from uploads and downloads directory
 app.use("/uploads", express.static("uploads"));
+app.use("/downloads", express.static("downloads"));
 
 // Routes
 app.use("/api", routes);

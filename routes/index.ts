@@ -1,10 +1,11 @@
-import express from "express";
+import express, { response } from "express";
 import { authController } from "../controllers/authController";
 import { messageController } from "../controllers/messageController";
 import { scheduleController } from "../controllers/scheduleController";
 import { auth } from "../middleware/auth";
 import { checkRole } from "../middleware/checkRole";
 import { uploadController } from "../controllers/uploadController";
+import { downloadController } from "../controllers/downloadController";
 
 const router = express.Router();
 
@@ -15,6 +16,13 @@ router.get("/auth/me", auth, authController.getCurrentUser);
 
 // Upload routes  (protected)
 router.post("/uploadAvatar", auth, uploadController.uploadAvatar);
+
+// Download routes (protected)
+router.get(
+  "/downloads/report-data",
+  auth,
+  downloadController.downloadReportData
+);
 
 // Schedule routes (protected)
 router.post(

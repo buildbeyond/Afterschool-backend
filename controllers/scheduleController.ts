@@ -150,6 +150,26 @@ export const scheduleController = {
                     update.scheduleInfo.hadDinner,
                   [`entries.${entryIndex}.remarks`]:
                     update.scheduleInfo.remarks,
+                  [`entries.${entryIndex}.familySupport`]:
+                    update.scheduleInfo.familySupport,
+                  [`entries.${entryIndex}.medicalSupport`]:
+                    update.scheduleInfo.medicalSupport,
+                  [`entries.${entryIndex}.extendedSupport`]:
+                    update.scheduleInfo.extendedSupport,
+                  [`entries.${entryIndex}.concentratedSupport`]:
+                    update.scheduleInfo.concentratedSupport,
+                  [`entries.${entryIndex}.specializedSupport`]:
+                    update.scheduleInfo.specializedSupport,
+                  [`entries.${entryIndex}.communitySupport`]:
+                    update.scheduleInfo.communitySupport,
+                  [`entries.${entryIndex}.bathSupport`]:
+                    update.scheduleInfo.bathSupport,
+                  [`entries.${entryIndex}.childCareSupport`]:
+                    update.scheduleInfo.childCareSupport,
+                  [`entries.${entryIndex}.selfSupport`]:
+                    update.scheduleInfo.selfSupport,
+                  [`entries.${entryIndex}.guardianConfirmation`]:
+                    update.scheduleInfo.guardianConfirmation,
                 },
               }
             );
