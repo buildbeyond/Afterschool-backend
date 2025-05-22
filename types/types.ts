@@ -8,6 +8,14 @@ export interface IUserBase {
   password: string;
   role: string;
   avatar: string;
+  recipientNumbers: string;
+  companyName: string;
+  businessNumbers: string;
+  guardianName: string;
+  serviceSlot: {
+    attendance: { start: string; end: string }[];
+    holiday: { start: string; end: string }[];
+  };
 }
 
 // Interface for populated user documents

@@ -14,7 +14,7 @@ export const authController = {
       });
 
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).json({ message: "すでに同じユーザーが存在します。" });
       }
 
       const user = new User({ username, email, password, role });
@@ -68,6 +68,26 @@ export const authController = {
       res.json({ user });
     } catch (error) {
       res.status(500).json({ message: "Server error" });
+    }
+  }) as RequestHandler,
+
+  saveProfile: (async (req: AuthRequest, res: Response) => {
+    try {
+      const { profileData } = req.body;
+      const userId = req.user?.userId;
+      const user = await User.findByIdAndUpdate(
+        userId,
+        {
+          $set: profileData,
+        },
+        { new: true }
+      );
+      if (!user) {
+        return res.status(404).json({ message: "ユーザーが見つかりません。" });
+      }
+      res.json({ user });
+    } catch (error) {
+      res.status(500).json({ message: "サーバーエラー" });
     }
   }) as RequestHandler,
 };

@@ -27,9 +27,9 @@ export interface ISchedule extends Document {
     additionalUse: boolean;
     notes: string;
     remarks: string;
-    familySupport: boolean;
+    familySupport: string;
     medicalSupport: boolean;
-    extendedSupport: boolean;
+    extendedSupport: string;
     concentratedSupport: boolean;
     specializedSupport: boolean;
     communitySupport: boolean;
@@ -70,9 +70,9 @@ const ScheduleSchema: Schema = new Schema(
         additionalUse: { type: Boolean, default: false },
         notes: { type: String, default: "" },
         remarks: { type: String, default: "" },
-        familySupport: { type: Boolean, default: false },
+        familySupport: { type: String, default: "" },
         medicalSupport: { type: Boolean, default: false },
-        extendedSupport: { type: Boolean, default: false },
+        extendedSupport: { type: String, default: "" },
         concentratedSupport: { type: Boolean, default: false },
         specializedSupport: { type: Boolean, default: false },
         communitySupport: { type: Boolean, default: false },

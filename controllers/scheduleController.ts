@@ -86,10 +86,7 @@ export const scheduleController = {
       const stats = schedules
         .filter(
           (schedule) =>
-            schedule.entries.filter(
-              (entry) =>
-                entry.date === day && !entry.isHoliday && !entry.beAbsent
-            ).length
+            schedule.entries.filter((entry) => entry.date === day).length
         )
         .map((schedule) => {
           return {
@@ -99,8 +96,7 @@ export const scheduleController = {
               avatar: (schedule.user as IUser).avatar,
             },
             scheduleInfo: schedule.entries.filter(
-              (entry) =>
-                entry.date === day && !entry.isHoliday && !entry.beAbsent
+              (entry) => entry.date === day
             )[0],
           };
         });

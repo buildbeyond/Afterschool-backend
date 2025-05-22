@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/auth/register", authController.register);
 router.post("/auth/login", authController.login);
 router.get("/auth/me", auth, authController.getCurrentUser);
-
+router.post("/auth/save-profile", auth, authController.saveProfile);
 // Upload routes  (protected)
 router.post("/uploadAvatar", auth, uploadController.uploadAvatar);
 

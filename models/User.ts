@@ -35,6 +35,43 @@ const userSchema = new mongoose.Schema(
       enum: ["parent", "coach"],
       required: true,
     },
+    recipientNumbers: {
+      type: String,
+      default: "",
+    },
+    companyName: {
+      type: String,
+      default: "",
+    },
+    businessNumbers: {
+      type: String,
+      default: "",
+    },
+    guardianName: {
+      type: String,
+      default: "",
+    },
+    serviceSlot: {
+      type: Object,
+      default: {
+        attendance: [
+          { start: "", end: "" },
+          { start: "", end: "" },
+          { start: "", end: "" },
+          { start: "", end: "" },
+          { start: "", end: "" },
+          { start: "", end: "" },
+        ],
+        holiday: [
+          { start: "", end: "" },
+          { start: "", end: "" },
+          { start: "", end: "" },
+          { start: "", end: "" },
+          { start: "", end: "" },
+          { start: "", end: "" },
+        ],
+      },
+    },
   },
   {
     timestamps: true,
