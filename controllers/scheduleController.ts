@@ -136,16 +136,26 @@ export const scheduleController = {
                     update.scheduleInfo.actualStart,
                   [`entries.${entryIndex}.actualEnd`]:
                     update.scheduleInfo.actualEnd,
+                  [`entries.${entryIndex}.actualAmount`]:
+                    update.scheduleInfo.actualAmount,
                   [`entries.${entryIndex}.wasAbsent`]:
                     update.scheduleInfo.wasAbsent,
+                  [`entries.${entryIndex}.plannedPickup`]:
+                    update.scheduleInfo.plannedPickup,
+                  [`entries.${entryIndex}.plannedReturn`]:
+                    update.scheduleInfo.plannedReturn,
                   [`entries.${entryIndex}.hadSnack`]:
                     update.scheduleInfo.hadSnack,
+                  [`entries.${entryIndex}.lunch`]: update.scheduleInfo.lunch,
+                  [`entries.${entryIndex}.dinner`]: update.scheduleInfo.dinner,
                   [`entries.${entryIndex}.hadLunch`]:
                     update.scheduleInfo.hadLunch,
                   [`entries.${entryIndex}.hadDinner`]:
                     update.scheduleInfo.hadDinner,
                   [`entries.${entryIndex}.remarks`]:
                     update.scheduleInfo.remarks,
+                  [`entries.${entryIndex}.supportType`]:
+                    update.scheduleInfo.supportType,
                   [`entries.${entryIndex}.familySupport`]:
                     update.scheduleInfo.familySupport,
                   [`entries.${entryIndex}.medicalSupport`]:
@@ -183,6 +193,26 @@ export const scheduleController = {
         message: "Server error",
         error: error instanceof Error ? error.message : "Unknown error",
       });
+    }
+  },
+
+  getIndividual: async (req: AuthRequest, res: Response) => {
+    try {
+      const { month, year, userId } = req.query;
+      const schedule = await Schedule.findOne({
+        user: userId,
+        month,
+        year,
+      }).populate("user");
+
+      if (!schedule) {
+        return res.status(404).json({ message: "Schedule not found" });
+      }
+
+      res.status(200).json({ schedule });
+    } catch (error) {
+      console.error("Get individual schedule error:", error);
+      res.status(500).json({ message: "Server error" });
     }
   },
 };

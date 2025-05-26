@@ -87,17 +87,10 @@ export const downloadController = {
               worksheet.getCell(`H${index}`).value = entry.wasAbsent
                 ? "欠席"
                 : null;
-              worksheet.getCell(`N${index}`).value = entry.wasAbsent
-                ? null
-                : entry.isHoliday
-                ? 2
-                : 1;
+              worksheet.getCell(`N${index}`).value = entry.supportType;
               worksheet.getCell(`R${index}`).value = entry.actualStart;
               worksheet.getCell(`V${index}`).value = entry.actualEnd;
-              worksheet.getCell(`Z${index}`).value =
-                Math.round(
-                  timediff(entry.actualStart, entry.actualEnd) / 1000 / 60 / 30
-                ) / 2 || null;
+              worksheet.getCell(`Z${index}`).value = entry.actualAmount;
               worksheet.getCell(`AD${index}`).value = entry.plannedPickup
                 ? 1
                 : null;

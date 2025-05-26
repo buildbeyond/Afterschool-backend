@@ -19,6 +19,7 @@ export interface ISchedule extends Document {
     plannedReturnLocation: string;
     actualStart: string;
     actualEnd: string;
+    actualAmount: string;
     lunch: boolean;
     dinner: boolean;
     hadSnack: boolean;
@@ -27,6 +28,7 @@ export interface ISchedule extends Document {
     additionalUse: boolean;
     notes: string;
     remarks: string;
+    supportType: string;
     familySupport: string;
     medicalSupport: boolean;
     extendedSupport: string;
@@ -62,6 +64,7 @@ const ScheduleSchema: Schema = new Schema(
         plannedReturnLocation: { type: String, default: "学校" },
         actualStart: { type: String, default: "" },
         actualEnd: { type: String, default: "" },
+        actualAmount: { type: String, default: "0" },
         lunch: { type: Boolean, default: true },
         dinner: { type: Boolean, default: true },
         hadSnack: { type: Boolean, default: false },
@@ -70,6 +73,7 @@ const ScheduleSchema: Schema = new Schema(
         additionalUse: { type: Boolean, default: false },
         notes: { type: String, default: "" },
         remarks: { type: String, default: "" },
+        supportType: { type: String, default: "1" },
         familySupport: { type: String, default: "" },
         medicalSupport: { type: Boolean, default: false },
         extendedSupport: { type: String, default: "" },

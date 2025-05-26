@@ -52,6 +52,13 @@ router.post(
   scheduleController.updateScheduleStats as express.RequestHandler
 );
 
+router.get(
+  "/schedule/individual",
+  auth,
+  checkRole(["coach"]) as express.RequestHandler,
+  scheduleController.getIndividual as express.RequestHandler
+);
+
 // Message routes (protected)
 router.get("/messages/coach", auth, messageController.getCoach);
 router.get(
