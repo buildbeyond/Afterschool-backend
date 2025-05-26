@@ -1,6 +1,0 @@
-DATABASE_URL=mongodb://root:Urbaninfluence09!@157.230.237.201:27017/bestAutoRefinance?authSource=admin
-VEHICLE_API=https://vehapi.com/api/v1
-KV_URL=redis://default:AeaFAAIjcDFlYTY3ODc2YTQ3OTk0YWUyYjJiMWJhNDU4MWI4YWYwZnAxMA@caring-honeybee-59013.upstash.io:6379
-KV_REST_API_URL=https://caring-honeybee-59013.upstash.io
-KV_REST_API_TOKEN=AeaFAAIjcDFlYTY3ODc2YTQ3OTk0YWUyYjJiMWJhNDU4MWI4YWYwZnAxMA
-KV_REST_API_READ_ONLY_TOKEN=AuaFAAIgcDH1CHpgGsamubqQYkBxomjRM2Vd7pQyWiEjJmns_gxVxw
