@@ -28,8 +28,18 @@ export interface IMessage {
   sender: Types.ObjectId | IUser;
   receiver: Types.ObjectId | IUser;
   content: string;
+  attachment: string;
   read: boolean;
   createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IAttachment {
+  _id: string;
+  user: Types.ObjectId | IUser;
+  fileName: string;
+  fileContent: string;
+  createAt: Date;
   updatedAt: Date;
 }
 

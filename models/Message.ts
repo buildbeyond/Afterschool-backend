@@ -15,7 +15,12 @@ const messageSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: true,
+      required: false,
+    },
+    attachment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Attachment",
+      required: false,
     },
     read: {
       type: Boolean,

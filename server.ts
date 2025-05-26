@@ -62,17 +62,28 @@ io.on("connection", (socket) => {
   // Handle new messages
   socket.on(
     "send_message",
-    async (data: { sender: string; receiver: string; content: string }) => {
+    async (data: {
+      sender: string;
+      receiver: string;
+      content?: string;
+      attachment?: string;
+    }) => {
       try {
         console.log("New message received:", data);
+        if (!data.content && !data.attachment) {
+          return;
+        }
 
         const message = new Message({
           sender: data.sender,
           receiver: data.receiver,
           content: data.content,
+          attachment: data.attachment ? data.attachment : "",
         });
         await message.save();
-        await message.populate("sender receiver", "username");
+        await (
+          await message.populate("sender receiver", "username")
+        ).populate("attachment");
 
         console.log("Message saved and populated:", message);
 

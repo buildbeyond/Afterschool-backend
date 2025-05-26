@@ -3,6 +3,7 @@ import { Message } from "../models/Message";
 import { User } from "../models/User";
 import { AuthRequest, IUser } from "../types/types";
 import { Types } from "mongoose";
+import { Attachment } from "../models/Attachment";
 
 export const messageController = {
   // Get the coach (used by parents to send messages)
@@ -34,13 +35,14 @@ export const messageController = {
             ],
           })
             .sort({ createdAt: -1 })
-            .select("content createdAt");
+            .select("content attachment createdAt");
 
           return {
             ...parent.toObject(),
             lastMessage: lastMessage
               ? {
                   content: lastMessage.content,
+                  attachment: lastMessage.attachment,
                   createdAt: lastMessage.createdAt,
                 }
               : null,
@@ -66,7 +68,8 @@ export const messageController = {
         ],
       })
         .sort({ createdAt: 1 })
-        .populate("sender receiver", "username");
+        .populate("sender receiver", "username")
+        .populate("attachment");
 
       res.json(messages);
     } catch (error) {
@@ -77,16 +80,21 @@ export const messageController = {
   // Send a message
   sendMessage: (async (req: AuthRequest, res: Response) => {
     try {
-      const { receiver, content } = req.body;
+      const { receiver, content, attachment } = req.body;
+
+      console.log("attachment", attachment);
 
       const message = new Message({
         sender: req.user?.userId,
         receiver,
         content,
+        attachment: attachment ?? "",
       });
 
       await message.save();
-      await message.populate("sender receiver", "username");
+      (await message.populate("sender receiver", "username")).populate(
+        "attachment"
+      );
 
       res.status(201).json(message);
     } catch (error) {

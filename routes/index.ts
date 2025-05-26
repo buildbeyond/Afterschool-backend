@@ -14,14 +14,21 @@ router.post("/auth/register", authController.register);
 router.post("/auth/login", authController.login);
 router.get("/auth/me", auth, authController.getCurrentUser);
 router.post("/auth/save-profile", auth, authController.saveProfile);
-// Upload routes  (protected)
+
+// Upload routes
 router.post("/uploadAvatar", auth, uploadController.uploadAvatar);
+router.post("/uploadAttachment", auth, uploadController.uploadAttachment);
 
 // Download routes (protected)
 router.get(
   "/downloads/report-data",
   auth,
   downloadController.downloadReportData
+);
+router.get(
+  "/downloads/attachment",
+  auth,
+  downloadController.downloadAttachment
 );
 
 // Schedule routes (protected)

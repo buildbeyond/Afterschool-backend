@@ -4,6 +4,7 @@ import excel from "exceljs";
 import fs from "fs";
 import Schedule from "../models/Schedule";
 import { User } from "../models/User";
+import { Attachment } from "../models/Attachment";
 
 const downloadPath = "./downloads";
 
@@ -148,5 +149,32 @@ export const downloadController = {
         console.log(err);
         return res.status(500).json({ error: "Failed to parse XLSX file" });
       });
+  }) as RequestHandler,
+  downloadAttachment: (async (req: AuthRequest, res: Response) => {
+    try {
+      if (!req.user?.userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      const user = await User.findById(req.user.userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      const { attachment_id: attachmentId } = req.query;
+      const attachment = await Attachment.findOne({
+        _id: attachmentId,
+        user: user._id,
+      });
+      console.log("attachment", attachment);
+      if (!attachment) {
+        return res.status(404).json({ error: "Attachment not found" });
+      }
+      res.download(attachment.fileContent, attachment.fileName, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    } catch (err) {
+      console.log("Error. Download attachment", err);
+    }
   }) as RequestHandler,
 };
