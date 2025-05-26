@@ -105,12 +105,18 @@ export const uploadController = {
         if (!file) {
           return res.status(400).json({ message: "No file uploaded" });
         }
+        const { receiver } = req.body;
         const user = await User.findById(req.user?.userId);
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
+        const recipient = await User.findById(receiver);
+        if (!recipient) {
+          return res.status(404).json({ message: "Recipient not found" });
+        }
         const newAttachment = new Attachment({
           user: user.id,
+          recipient: recipient.id,
           fileName: file.originalname,
           fileContent: file.path,
         });

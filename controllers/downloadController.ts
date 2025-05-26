@@ -162,7 +162,7 @@ export const downloadController = {
       const { attachment_id: attachmentId } = req.query;
       const attachment = await Attachment.findOne({
         _id: attachmentId,
-        user: user._id,
+        $or: [{ user: user._id }, { recipient: user._id }],
       });
       console.log("attachment", attachment);
       if (!attachment) {
