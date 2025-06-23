@@ -14,7 +14,9 @@ export const authController = {
       });
 
       if (existingUser) {
-        return res.status(400).json({ message: "すでに同じユーザーが存在します。" });
+        return res
+          .status(400)
+          .json({ message: "すでに同じユーザーが存在します。" });
       }
 
       const user = new User({ username, email, password, role });
@@ -87,6 +89,24 @@ export const authController = {
       }
       res.json({ user });
     } catch (error) {
+      res.status(500).json({ message: "サーバーエラー" });
+    }
+  }) as RequestHandler,
+
+  getAllParents: (async (req: AuthRequest, res: Response) => {
+    try {
+      const user = await User.findById(req.user?.userId);
+      if (!user) {
+        return res.status(404).json({ message: "ユーザーが見つかりません。" });
+      }
+      if (user.role != "coach") {
+        return res.status(401).json({ message: "No permission." });
+      }
+      const parents = await User.find({
+        role: "parent",
+      }).select("id username avatar");
+      res.json({ parents });
+    } catch (err) {
       res.status(500).json({ message: "サーバーエラー" });
     }
   }) as RequestHandler,

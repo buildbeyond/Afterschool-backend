@@ -14,6 +14,7 @@ router.post("/auth/register", authController.register);
 router.post("/auth/login", authController.login);
 router.get("/auth/me", auth, authController.getCurrentUser);
 router.post("/auth/save-profile", auth, authController.saveProfile);
+router.get("/all-parents", auth, authController.getAllParents);
 
 // Upload routes
 router.post("/uploadAvatar", auth, uploadController.uploadAvatar);
