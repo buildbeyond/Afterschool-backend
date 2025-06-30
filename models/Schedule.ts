@@ -9,7 +9,7 @@ export interface ISchedule extends Document {
     date: string;
     day: string;
     isHoliday: boolean;
-    beAbsent: boolean;
+    wasPresent: boolean;
     wasAbsent: boolean;
     plannedStart: string;
     plannedEnd: string;
@@ -54,7 +54,7 @@ const ScheduleSchema: Schema = new Schema(
         date: { type: String, required: true },
         day: { type: String, required: true },
         isHoliday: { type: Boolean, default: false },
-        beAbsent: { type: Boolean, default: false },
+        wasPresent: { type: Boolean, default: false },
         wasAbsent: { type: Boolean, default: false },
         plannedStart: { type: String, default: "" },
         plannedEnd: { type: String, default: "" },
