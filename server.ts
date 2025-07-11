@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
           sender: data.sender,
           receiver: data.receiver,
           content: data.content,
-          attachment: data.attachment ? data.attachment : "",
+          attachment: data.attachment ? data.attachment : null,
         });
         await message.save();
         await (
