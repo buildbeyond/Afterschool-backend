@@ -11,7 +11,7 @@ export const messageController = {
     try {
       const coach = await User.findOne({ role: "coach" }).select("-password");
       if (!coach) {
-        return res.status(404).json({ message: "コーチが見つかりません。" });
+        return res.status(404).json({ message: "管理者が見つかりません。" });
       }
       res.json({ coach });
     } catch (error) {

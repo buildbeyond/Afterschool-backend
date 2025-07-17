@@ -1,15 +1,31 @@
-import sgMail from "@sendgrid/mail";
-sgMail.setApiKey(process.env.SENDGRID_API_KEY as string);
+import twilio from "twilio";
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
 
 async function sendResetEmail(toEmail: string, resetLink: string) {
-  const msg = {
-    to: toEmail,
-    from: "no-reply@yourdomain.com",
-    subject: "Reset your password",
-    html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>
-           <p>If you didn't request this, you can ignore this message.</p>`,
-  };
-  await sgMail.send(msg);
+  try {
+    const email = await client.sendgrid.v3.mail.send.post({
+      personalizations: [
+        {
+          to: [{ email: "recipient@example.com" }],
+          subject: "Hello from Twilio SendGrid",
+        },
+      ],
+      from: { email: "your-verified-email@yourdomain.com" },
+      content: [
+        {
+          type: "text/plain",
+          value: "This is a test email",
+        },
+      ],
+    });
+
+    console.log("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
 }
 
 export default sendResetEmail;

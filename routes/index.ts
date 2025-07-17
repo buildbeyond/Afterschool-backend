@@ -16,6 +16,7 @@ router.get("/auth/me", auth, authController.getCurrentUser);
 router.post("/auth/save-profile", auth, authController.saveProfile);
 router.post("/auth/forgot-password", authController.forgotPassword);
 router.post("/auth/reset-password/:token", authController.resetPassword);
+router.post("/auth/delete-user", auth, authController.deleteUser);
 
 router.get("/all-parents", auth, authController.getAllParents);
 

@@ -9,7 +9,7 @@ import crypto from "crypto";
 export const authController = {
   register: (async (req: Request, res: Response) => {
     try {
-      const { username, email, password, role }: IRegisterInput = req.body;
+      const { username, email, password }: IRegisterInput = req.body;
 
       const existingUser = await User.findOne({
         $or: [{ email }, { username }],
@@ -21,7 +21,7 @@ export const authController = {
           .json({ message: "すでに同じユーザーが存在します。" });
       }
 
-      const user = new User({ username, email, password, role });
+      const user = new User({ username, email, password, role: "parent" });
       await user.save();
 
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
@@ -106,7 +106,7 @@ export const authController = {
       }
       const parents = await User.find({
         role: "parent",
-      }).select("id username avatar");
+      }).select("id username email guardianName avatar");
       res.json({ parents });
     } catch (err) {
       res.status(500).json({ message: "サーバーエラー" });
@@ -145,5 +145,21 @@ export const authController = {
     await user.save();
 
     res.send("Password has been reset!");
+  }) as RequestHandler,
+
+  deleteUser: (async (req: AuthRequest, res: Response) => {
+    const user = await User.findById(req.user?.userId);
+    if (!user) {
+      return res.status(404).json("user not found");
+    }
+    if (user.role !== "coach") {
+      return res.status(403).json("no permission");
+    }
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json("Invalid request");
+    }
+    const deletedUser = await User.findByIdAndDelete(userId);
+    res.send("Successfully deleted");
   }) as RequestHandler,
 };
