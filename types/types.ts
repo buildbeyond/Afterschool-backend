@@ -16,6 +16,8 @@ export interface IUserBase {
     attendance: { start: string; end: string }[];
     holiday: { start: string; end: string }[];
   };
+  resetToken?: string;
+  resetTokenExpiry?: number;
 }
 
 // Interface for populated user documents

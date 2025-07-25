@@ -72,6 +72,14 @@ const userSchema = new mongoose.Schema(
         ],
       },
     },
+    resetToken: {
+      type: String,
+      default: "",
+    },
+    resetTokenExpiry: {
+      type: Number,
+      default: "",
+    },
   },
   {
     timestamps: true,

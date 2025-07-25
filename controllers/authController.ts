@@ -3,11 +3,13 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 import { ILoginInput, IRegisterInput } from "../types/types";
 import { AuthRequest } from "../types/types";
+import sendResetPasswordEmail from "../utils/sendMail";
+import crypto from "crypto";
 
 export const authController = {
   register: (async (req: Request, res: Response) => {
     try {
-      const { username, email, password, role }: IRegisterInput = req.body;
+      const { username, email, password }: IRegisterInput = req.body;
 
       const existingUser = await User.findOne({
         $or: [{ email }, { username }],
@@ -19,7 +21,7 @@ export const authController = {
           .json({ message: "すでに同じユーザーが存在します。" });
       }
 
-      const user = new User({ username, email, password, role });
+      const user = new User({ username, email, password, role: "parent" });
       await user.save();
 
       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
@@ -104,10 +106,70 @@ export const authController = {
       }
       const parents = await User.find({
         role: "parent",
-      }).select("id username avatar");
+      }).select("id username email guardianName avatar");
       res.json({ parents });
     } catch (err) {
       res.status(500).json({ message: "サーバーエラー" });
     }
+  }) as RequestHandler,
+
+  forgotPassword: (async (req: Request, res: Response) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      res.status(404).json({ message: "ユーザーが見つかりません" });
+      return;
+    }
+
+    const token = crypto.randomBytes(32).toString("hex");
+    user.resetToken = token;
+    user.resetTokenExpiry = Date.now() + 3600000;
+    await user.save();
+
+    const resetLink = `${process.env.CLIENT_URL}/auth/reset-password/${token}`;
+    sendResetPasswordEmail(email, resetLink);
+
+    res.json({
+      message:
+        "パスワード再設定用のリンクを送信しました（受信箱をご確認ください）",
+    });
+  }) as RequestHandler,
+
+  resetPassword: (async (req: Request, res: Response) => {
+    const { token } = req.params;
+    const { password } = req.body;
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() },
+    });
+    if (!user) {
+      res
+        .status(400)
+        .json({ message: "無効または有効期限が切れたトークンです" });
+      return;
+    }
+
+    user.password = password;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
+
+    res.json({ message: "パスワードがリセットされました！" });
+  }) as RequestHandler,
+
+  deleteUser: (async (req: AuthRequest, res: Response) => {
+    const user = await User.findById(req.user?.userId);
+    if (!user) {
+      return res.status(404).json("user not found");
+    }
+    if (user.role !== "coach") {
+      return res.status(403).json("no permission");
+    }
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json("Invalid request");
+    }
+    const deletedUser = await User.findByIdAndDelete(userId);
+    res.send("Successfully deleted");
   }) as RequestHandler,
 };
