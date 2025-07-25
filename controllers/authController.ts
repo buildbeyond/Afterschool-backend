@@ -116,7 +116,10 @@ export const authController = {
   forgotPassword: (async (req: Request, res: Response) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).send("User not found");
+    if (!user) {
+      res.status(404).json({ message: "ユーザーが見つかりません" });
+      return;
+    }
 
     const token = crypto.randomBytes(32).toString("hex");
     user.resetToken = token;
@@ -124,10 +127,12 @@ export const authController = {
     await user.save();
 
     const resetLink = `${process.env.CLIENT_URL}/auth/reset-password/${token}`;
-    console.log(resetLink);
     sendResetPasswordEmail(email, resetLink);
 
-    res.send("Reset link sent (check your inbox)");
+    res.json({
+      message:
+        "パスワード再設定用のリンクを送信しました（受信箱をご確認ください）",
+    });
   }) as RequestHandler,
 
   resetPassword: (async (req: Request, res: Response) => {
@@ -138,7 +143,9 @@ export const authController = {
       resetTokenExpiry: { $gt: Date.now() },
     });
     if (!user) {
-      res.status(400).json({ message: "Invalid or expired token" });
+      res
+        .status(400)
+        .json({ message: "無効または有効期限が切れたトークンです" });
       return;
     }
 
@@ -147,7 +154,7 @@ export const authController = {
     user.resetTokenExpiry = undefined;
     await user.save();
 
-    res.json({ message: "Password has been reset!" });
+    res.json({ message: "パスワードがリセットされました！" });
   }) as RequestHandler,
 
   deleteUser: (async (req: AuthRequest, res: Response) => {

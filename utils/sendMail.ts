@@ -12,12 +12,12 @@ const sendResetPasswordEmail = async (
   const msg = {
     to: toEmail,
     from: process.env.SENDGRID_SENDER as string, // This must be verified in your SendGrid account
-    subject: "Reset your password",
+    subject: "パスワードをリセットしてください",
     html: `
-      <h2>Password Reset Requested</h2>
-      <p>Click the link below to reset your password:</p>
+      <h2>パスワード再設定のリクエストを受け付けました</h2>
+      <p>以下のリンクをクリックして、パスワードを再設定してください。</p>
       <a href="${resetLink}">${resetLink}</a>
-      <p>This link will expire in 1 hour.</p>
+      <p>このリンクの有効期限は1時間です。</p>
     `,
   };
 
