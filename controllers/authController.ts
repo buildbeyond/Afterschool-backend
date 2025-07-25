@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User";
 import { ILoginInput, IRegisterInput } from "../types/types";
 import { AuthRequest } from "../types/types";
-import sendResetEmail from "../utils/sendMail";
+import sendResetPasswordEmail from "../utils/sendMail";
 import crypto from "crypto";
 
 export const authController = {
@@ -119,13 +119,13 @@ export const authController = {
     if (!user) return res.status(404).send("User not found");
 
     const token = crypto.randomBytes(32).toString("hex");
-    // user.resetToken = token;
-    // user.resetTokenExpiry = Date.now() + 3600000;
-    // await user.save();
+    user.resetToken = token;
+    user.resetTokenExpiry = Date.now() + 3600000;
+    await user.save();
 
-    const resetLink = `https://yourapp.com/reset-password/${token}`;
+    const resetLink = `${process.env.CLIENT_URL}/auth/reset-password/${token}`;
     console.log(resetLink);
-    // sendResetEmail(email, resetLink);
+    sendResetPasswordEmail(email, resetLink);
 
     res.send("Reset link sent (check your inbox)");
   }) as RequestHandler,
@@ -137,14 +137,17 @@ export const authController = {
       resetToken: token,
       resetTokenExpiry: { $gt: Date.now() },
     });
-    if (!user) return res.status(400).send("Invalid or expired token");
+    if (!user) {
+      res.status(400).json({ message: "Invalid or expired token" });
+      return;
+    }
 
     user.password = password;
     user.resetToken = undefined;
     user.resetTokenExpiry = undefined;
     await user.save();
 
-    res.send("Password has been reset!");
+    res.json({ message: "Password has been reset!" });
   }) as RequestHandler,
 
   deleteUser: (async (req: AuthRequest, res: Response) => {
