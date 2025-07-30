@@ -87,62 +87,64 @@ export const downloadController = {
           }
           //
           let index = 13;
-          schedule.entries.forEach((entry) => {
-            if (entry.isHoliday) {
-              return;
-            }
-            worksheet.getCell(`B${index}`).value = entry.date;
-            worksheet.getCell(`E${index}`).value = entry.day;
-            worksheet.getCell(`H${index}`).value = entry.wasAbsent
-              ? "欠席"
-              : null;
-            if (entry.wasAbsent) {
+          if (schedule && schedule.entries) {
+            schedule.entries.forEach((entry) => {
+              if (entry.isHoliday) {
+                return;
+              }
+              worksheet.getCell(`B${index}`).value = entry.date;
+              worksheet.getCell(`E${index}`).value = entry.day;
+              worksheet.getCell(`H${index}`).value = entry.wasAbsent
+                ? "欠席"
+                : null;
+              if (entry.wasAbsent) {
+                index++;
+                return;
+              }
+              worksheet.getCell(`N${index}`).value = entry.supportType;
+              worksheet.getCell(`R${index}`).value = entry.actualStart;
+              worksheet.getCell(`V${index}`).value = entry.actualEnd;
+              worksheet.getCell(`Z${index}`).value = entry.actualAmount;
+              worksheet.getCell(`AD${index}`).value = entry.plannedPickup
+                ? 1
+                : null;
+              worksheet.getCell(`AG${index}`).value = entry.plannedReturn
+                ? 1
+                : null;
+              worksheet.getCell(`AJ${index}`).value = entry.familySupport
+                ? parseInt(entry.familySupport)
+                : null;
+              worksheet.getCell(`AN${index}`).value = entry.medicalSupport
+                ? 1
+                : null;
+              worksheet.getCell(`AR${index}`).value = entry.extendedSupport
+                ? parseInt(entry.extendedSupport)
+                : null;
+              worksheet.getCell(`AV${index}`).value = entry.concentratedSupport
+                ? 1
+                : null;
+              worksheet.getCell(`AZ${index}`).value = entry.specializedSupport
+                ? 1
+                : null;
+              worksheet.getCell(`BD${index}`).value = entry.communitySupport
+                ? 1
+                : null;
+              worksheet.getCell(`BH${index}`).value = entry.bathSupport
+                ? 1
+                : null;
+              worksheet.getCell(`BL${index}`).value = entry.childCareSupport
+                ? 1
+                : null;
+              worksheet.getCell(`BP${index}`).value = entry.selfSupport
+                ? 1
+                : null;
+              worksheet.getCell(`BT${index}`).value = entry.guardianConfirmation
+                ? 1
+                : null;
+              worksheet.getCell(`BY${index}`).value = entry.remarks;
               index++;
-              return;
-            }
-            worksheet.getCell(`N${index}`).value = entry.supportType;
-            worksheet.getCell(`R${index}`).value = entry.actualStart;
-            worksheet.getCell(`V${index}`).value = entry.actualEnd;
-            worksheet.getCell(`Z${index}`).value = entry.actualAmount;
-            worksheet.getCell(`AD${index}`).value = entry.plannedPickup
-              ? 1
-              : null;
-            worksheet.getCell(`AG${index}`).value = entry.plannedReturn
-              ? 1
-              : null;
-            worksheet.getCell(`AJ${index}`).value = entry.familySupport
-              ? parseInt(entry.familySupport)
-              : null;
-            worksheet.getCell(`AN${index}`).value = entry.medicalSupport
-              ? 1
-              : null;
-            worksheet.getCell(`AR${index}`).value = entry.extendedSupport
-              ? parseInt(entry.extendedSupport)
-              : null;
-            worksheet.getCell(`AV${index}`).value = entry.concentratedSupport
-              ? 1
-              : null;
-            worksheet.getCell(`AZ${index}`).value = entry.specializedSupport
-              ? 1
-              : null;
-            worksheet.getCell(`BD${index}`).value = entry.communitySupport
-              ? 1
-              : null;
-            worksheet.getCell(`BH${index}`).value = entry.bathSupport
-              ? 1
-              : null;
-            worksheet.getCell(`BL${index}`).value = entry.childCareSupport
-              ? 1
-              : null;
-            worksheet.getCell(`BP${index}`).value = entry.selfSupport
-              ? 1
-              : null;
-            worksheet.getCell(`BT${index}`).value = entry.guardianConfirmation
-              ? 1
-              : null;
-            worksheet.getCell(`BY${index}`).value = entry.remarks;
-            index++;
-          });
+            });
+          }
         }
         await workbook.xlsx.writeFile(filename);
         res.download(filename, "report.xlsx", (err) => {

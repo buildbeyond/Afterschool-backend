@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { AuthRequest, IUser } from "../types/types";
 import Schedule, { ISchedule } from "../models/Schedule";
+import { User } from "../models/User";
 
 export const scheduleController = {
   createSchedule: async (req: AuthRequest, res: Response) => {
@@ -56,7 +57,9 @@ export const scheduleController = {
       });
 
       if (!schedule) {
-        return res.status(404).json({ message: "Schedule not found" });
+        return res.status(404).json({
+          message: "Schedule not found",
+        });
       }
 
       res.status(200).json({ schedule });
@@ -226,6 +229,19 @@ export const scheduleController = {
             schedule: existingSchedule,
           });
         }
+
+        // Create new schedule
+        const newSchedule = new Schedule({
+          user: userId,
+          month,
+          year,
+          entries: scheduleUpdates,
+        });
+        await newSchedule.save();
+        res.status(201).json({
+          message: "Schedule created successfully",
+          schedule: newSchedule,
+        });
       }
     } catch (error) {
       console.error("Update schedule stats error:", error);
@@ -246,7 +262,14 @@ export const scheduleController = {
       }).populate("user");
 
       if (!schedule) {
-        return res.status(404).json({ message: "Schedule not found" });
+        const user = await User.findById(userId).select("username");
+        let username = "";
+        if (user) {
+          username = user.username;
+        }
+        return res
+          .status(404)
+          .json({ message: "Schedule not found", username });
       }
 
       res.status(200).json({ schedule });
