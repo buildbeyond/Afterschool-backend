@@ -114,16 +114,21 @@ export const uploadController = {
         if (!recipient) {
           return res.status(404).json({ message: "Recipient not found" });
         }
+        const fileName = Buffer.from(file.originalname, "latin1").toString(
+          "utf8"
+        );
+        const filePath = Buffer.from(file.path, "latin1").toString("utf8");
         const newAttachment = new Attachment({
           user: user.id,
           recipient: recipient.id,
-          fileName: file.originalname,
-          fileContent: file.path,
+          fileName: fileName,
+          fileContent: filePath,
         });
         await newAttachment.save();
         res.json({
           message: "Attachment uploaded successfully",
           attachment: newAttachment._id,
+          fileName,
         });
       } catch (error) {
         res.status(500).json({ message: "Server error" });
